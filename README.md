@@ -19,5 +19,5 @@ Install `gdal` via `homebrew`, then should be same with Linux
 NO WARRANTY. Apache License 2.0 if proper.
 
 ## TODO
-Return spatial reference compatible with Mapping Toolboxes.
+Return spatial reference compatible with Mapping Toolboxes. (Partially *done*. Parse WKT with `prjparse` function)
 
