@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>readgdalband</title><link rel="stylesheet" href="style.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.69.1" /><link rel="start" href="index.html" title="MEXGDAL" /><link rel="up" href="ch01s04.html" title="Using Mexgdal" /><link rel="prev" href="ch01s04s02.html" title="readgdalsimple" /><link rel="next" href="ch02.html" title="Chapter 2.  Compiling Mexgdal" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">readgdalband</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01s04s02.html">Prev</a> </td><th width="60%" align="center">Using Mexgdal</th><td width="20%" align="right"> <a accesskey="n" href="ch02.html">Next</a></td></tr></table><hr /></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2476970"></a>readgdalband</h3></div></div></div><p>
+			Let's suppose we want to read in the 2nd band (green) of the MODIS image,
+			but starting at an offset of 500 rows and 700 columns from the
+			default.
+			</p><pre class="programlisting">
+&gt;&gt; input_options.band = 2;
+&gt;&gt; input_options.yorigin = 500;
+&gt;&gt; input_options.xorigin = 700;
+&gt;&gt; [x,y,z] = readgdalband ( 'data/modis.JPG', input_options );
+&gt;&gt; whos
+  Name                Size                    Bytes  Class
+
+  input_options       1x1                       396  struct array
+  x                   1x2                        16  double array
+  y                   1x2                        16  double array
+  z                1546x908                 1403768  uint8 array
+
+Grand total is 1403778 elements using 1404196 bytes
+
+			</pre><p>
+		</p><p>
+			Let's suppose we want to read in the third band (blue) of the MODIS image,
+			starting at an offset of 500 rows and 700 columns from the default,
+			but reading only 600 rows and 400 columns from that position.
+			</p><pre class="programlisting">
+&gt;&gt; input_options.band = 3;
+&gt;&gt; input_options.yorigin = 500;
+&gt;&gt; input_options.xorigin = 700;
+&gt;&gt; input_options.xextend = 400;
+&gt;&gt; input_options.yextend = 600;
+&gt;&gt; [x,y,z] = readgdalband ( 'data/modis.JPG', input_options );
+&gt;&gt; whos
+  Name                Size                    Bytes  Class
+
+  input_options       1x1                       660  struct array
+  x                   1x2                        16  double array
+  y                   1x2                        16  double array
+  z                 600x400                  240000  uint8 array
+
+Grand total is 1403778 elements using 1404196 bytes
+
+			</pre><p>
+		</p><p>
+			Other options exist, please use the help documentation for more information.
+		</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01s04s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">readgdalsimple </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 2.  Compiling Mexgdal</td></tr></table></div></body></html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title> Case Study:  Solaris</title><link rel="stylesheet" href="style.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.69.1" /><link rel="start" href="index.html" title="MEXGDAL" /><link rel="up" href="ch02.html" title="Chapter 2.  Compiling Mexgdal" /><link rel="prev" href="ch02s04.html" title=" Case Study:  x86-64 CentOS 4.1, older gcc" /><link rel="next" href="ch02s06.html" title=" Case Study:  Windows" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"> Case Study:  Solaris</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s04.html">Prev</a> </td><th width="60%" align="center">Chapter 2.  Compiling Mexgdal</th><td width="20%" align="right"> <a accesskey="n" href="ch02s06.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2522112"></a> Case Study:  Solaris</h2></div></div></div><p>
+Base system is 
+</p><table class="simplelist" border="0" summary="Simple list"><tr><td>gcc 4.1.1</td></tr><tr><td>SunOS ahab 5.8 Generic_108528-15 sun4u sparc SUNW,Ultra-60 Solaris</td></tr><tr><td>MATLAB Version 7.0.1.24704 (R14) Service Pack 1</td></tr><tr><td>gdal 1.3.2</td></tr></table><p>
+</p><p>
+First we retrieve and unpack
+gdal-1.3.2 from
+<a href="http://www.remotesensing.org/gdal/" target="_top">http://www.remotesensing.org/gdal/</a>.
+In order to build the library, I issued the commands
+
+</p><pre class="programlisting">
+./configure --prefix=/m1/local ; make ; make install
+</pre><p>
+
+Now copy the 
+<code class="filename">$MATLABROOT/bin/gccopts.sh</code> 
+into your mexshape directory, rename it to 
+<code class="filename">mexopts.sh</code>,
+and alter the CFLAGS and CLIBS section down
+at the very bottom to read
+
+</p><pre class="programlisting">
+GDAL="/m1/local"
+CFLAGS="$CFLAGS -I${GDAL}/include"
+CLIBS="$CLIBS -L${GDAL}/lib -lgdal "
+</pre><p>
+
+From the unix command line, issue the command
+
+</p><pre class="programlisting">
+
+# make 
+
+</pre><p>
+
+... and it works.
+</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s04.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s06.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> Case Study:  x86-64 CentOS 4.1, older gcc </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">  Case Study:  Windows</td></tr></table></div></body></html>

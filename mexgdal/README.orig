@@ -1,0 +1,396 @@
+MEXGDAL
+
+John Evans
+
+   IMCS
+     _________________________________________________________
+
+   Table of Contents
+   1. Introduction
+
+        1.1. Quick Overview
+        1.2. Requirements
+        1.3. Contents of this Package
+        1.4. Using Mexgdal
+
+              1.4.1. gdaldump
+              1.4.2. readgdalsimple
+              1.4.3. readgdalband
+
+   2. Compiling Mexgdal
+
+        2.1. Why Compile?
+        2.2. Case Study: i586 Mandriva 2006, R14
+        2.3. Case Study: i586 Mandriva 2006, R2006a
+        2.4. Case Study: x86-64 CentOS 4.1, older gcc
+        2.5. Case Study: Solaris
+        2.6. Case Study: Windows
+
+   3. Wrapping It All Up...
+
+        3.1. Credits
+     _________________________________________________________
+
+Chapter 1. Introduction
+
+1.1. Quick Overview
+
+   GDAL  is  a  library  capable  of reading a plethora of raster
+   formats.  If you have GDAL installed on your system, check out
+   "gdal-config  --formats"  to  see  what formats your installed
+   version  supports.  If you have a specific format in mind that
+   is  supported  by  GDAL,  but  not  listed  under "gdal-config
+   --formats", then you would have to recompile GDAL with support
+   for   that   format.   For   more  information  on  GDAL,  see
+   http://www.remotesensing.org/gdal/
+
+   MEXGDAL  is  the  interface  between  MATLAB  and  GDAL. It is
+   capable  of  reading  both  the  raster  metadata and the data
+   itself.
+
+   A  few  m-files  are  provided for your use, readgdalsimple.m,
+   readgdalband.m,  and  gdaldump.m.  These  sit  between you and
+   mexgdal, which you probably do not want to call directly.
+     _________________________________________________________
+
+1.2. Requirements
+
+   Mexshape requires Matlab version R13 or higher.
+
+   Mexshape requires gdal. Shapelib is distributed under the LGPL
+   and can be found at http://www.remotesensing.org/gdal/.
+     _________________________________________________________
+
+1.3. Contents of this Package
+
+   ChangeLog
+          Developer  information, you probably don't need to read
+          this.
+
+   CREDITS
+          People who've helped out with mexgdal.
+
+   NEWS
+          Information about the latest mexgdal release
+
+   README
+          Text  documentation  about  mexgdal. Equivalent to what
+          you will find in doc/html
+
+   doc/html
+          HTML  documentation  about  mexgdal. Equivalent to what
+          you will find in the README file.
+
+   doc/xml
+          DocBook  XML  documentation  about  mexshape.  This  is
+          actually   what   generates  the  README  and  doc/html
+          documentation.    Not   really   suitable   for   human
+          consumption.
+
+   makefile
+          Used to build the mex-file
+
+   private/mexgdal_validate_input_options.m
+          Validates  the users choices about how a raster file is
+          to be read. Should not be called directly by the user.
+
+   readgdalsimple.m
+          Assumes most basic defaults for reading a raster image.
+          May not work for complicated files.
+
+   readgdalband.m
+          Allows  for  more detailed control over how an image is
+          read.  Cannot  read  more  than  one  band  at  a time,
+          however.
+
+   gdaldump.m
+          Retrieves metadata about a raster file.
+
+   data/modis.{JPG,wld}
+          Test data.
+
+   test_gdal.m
+          Tests readgdalsimple.m with the MODIS image test data
+     _________________________________________________________
+
+1.4. Using Mexgdal
+
+1.4.1. gdaldump
+
+   gdaldump  is  an  m-file that does nothing but return metadata
+   about  the  raster  file  in question. For example, the raster
+   file  modis.JPG  is  provided with mexgdal (along with a world
+   file). Unleashing gdaldump upon this raster file yields
+>> a = gdaldump ( 'data/modis.JPG' )
+
+a =
+
+       ProjectionRef: ''
+        GeoTransform: [6x1 double]
+     DriverShortName: 'JPEG'
+      DriverLongName: 'JPEG JFIF'
+         RasterXSize: 1608
+         RasterYSize: 2046
+         RasterCount: 3
+              Driver: [49x1 struct]
+                Band: [3x1 struct]
+
+
+                           So here the image is clearly has 2046
+   rows  and  1608 columns of pixels. The raster file was clearly
+   identified  as a JPEG, which we already knew, of course (other
+   available drivers are listed in the Driver field).
+
+   The  RasterCount  is 3, meaning that there is a red channel, a
+   green channel, and a blue channel.
+
+   There  is  no  projection  associated with this raster, so the
+   ProjectionRef field is empty.
+     _________________________________________________________
+
+1.4.2. readgdalsimple
+
+   Readgdalsimple  is the m-file you will want to use most of the
+   time  to  actually  import the data into matlab. If we use the
+   provided  sample,  then reading and displaying the MODIS image
+   is as simple as
+>> [x,y,z] = readgdalsimple ( 'data/modis.JPG' );
+>> image ( x, y, z );
+>> set ( gca, 'YDir', 'Normal' );
+
+   Readgdalsimple  reads  in  all  the bands of an image at their
+   default  resolution.  But there's no guarantee that all of the
+   bands  have the same resolution. And who knows, maybe you just
+   want  to read in just a portion of a raster (sometime GeoTIFFs
+   can  get  awfully  large).  In  these  cases,  you  should try
+   readgdalband.
+     _________________________________________________________
+
+1.4.3. readgdalband
+
+   Let's  suppose  we want to read in the 2nd band (green) of the
+   MODIS  image,  but  starting  at an offset of 500 rows and 700
+   columns from the default.
+>> input_options.band = 2;
+>> input_options.yorigin = 500;
+>> input_options.xorigin = 700;
+>> [x,y,z] = readgdalband ( 'data/modis.JPG', input_options );
+>> whos
+  Name                Size                    Bytes  Class
+
+  input_options       1x1                       396  struct array
+  x                   1x2                        16  double array
+  y                   1x2                        16  double array
+  z                1546x908                 1403768  uint8 array
+
+Grand total is 1403778 elements using 1404196 bytes
+
+                           Let's suppose we want to read in the
+   third band (blue) of the MODIS image, starting at an offset of
+   500  rows  and  700 columns from the default, but reading only
+   600 rows and 400 columns from that position.
+>> input_options.band = 3;
+>> input_options.yorigin = 500;
+>> input_options.xorigin = 700;
+>> input_options.xextend = 400;
+>> input_options.yextend = 600;
+>> [x,y,z] = readgdalband ( 'data/modis.JPG', input_options );
+>> whos
+  Name                Size                    Bytes  Class
+
+  input_options       1x1                       660  struct array
+  x                   1x2                        16  double array
+  y                   1x2                        16  double array
+  z                 600x400                  240000  uint8 array
+
+Grand total is 1403778 elements using 1404196 bytes
+
+                           Other options exist, please use the
+   help documentation for more information.
+     _________________________________________________________
+
+Chapter 2. Compiling Mexgdal
+
+2.1. Why Compile?
+
+   I'm not distributing any binaries anymore, you have to compile
+   this  yourself.  Depending upon what platform you are on, this
+   means  you  may also have to compile GDAL yourself. But before
+   you  shed  crocodile  tears  and  start tearing out your hair,
+   compiling  GDAL  isn't  all that hard. If you use Linux, there
+   may  be pre-compiled packages such as RPMs available; you will
+   need  to  consult your local package management system. If you
+   can  forgive  a  shameless  plug,  Mandriva Linux makes this a
+   breeze...  But  anyway,  if you can't find any RPMs, just grab
+   the source code from http://www.remotesensing.org/gdal/.
+     _________________________________________________________
+
+2.2. Case Study: i586 Mandriva 2006, R14
+
+   The  following  RPMs were installed via URPMI from the contrib
+   media source (consult Easy URPMI for information on how to set
+   up  your  URPMI  media sources). Then copy the mexopts.sh from
+   your ${MATLAB}/bin directory into your working directory.
+
+   gdal-1.2.6-3mdk
+   libgdal1-1.2.6-3mdk
+   libgdal1-devel-1.2.6-3mdk
+
+   Then the bottom of mexopts.sh was modified to read
+        CLIBS="$CLIBS -lgdal"
+
+   Save  these  edits and invoke make from the unix command line.
+   Because  the  RPMs  install  in  the  normal  locations,  i.e.
+   /usr/lib  and /usr/include, the edits to mexopts.sh are pretty
+   minimal.
+     _________________________________________________________
+
+2.3. Case Study: i586 Mandriva 2006, R2006a
+
+   Base system is
+
+   gcc 4.0.1-5mdk
+   kernel 2.6.12-22mdk
+   MATLAB Version 7.2.0.294 (R2006a)
+
+   The instructions for the i586 R14 case study didn't quite work
+   here, as the attempt to run the test case resulted in
+>> test_gdal
+??? Invalid MEX-file '/home/jevans/matlab/mexgdal/mexgdal.mexglx':
+        /opt/MatlabR2006a/bin/glnx86/../../sys/os/glnx86/libgcc_s.so.1:
+
+        version `GCC_4.0.0' not found (required by /usr/lib/libgeos.so.
+2).
+
+Error in ==> gdaldump at 67
+metadata = mexgdal ( gdalfile, options );
+
+Error in ==> test_gdal at 3
+m = gdaldump ( f );
+
+
+           This   is   pretty   common   when   building   mex-files   on
+   linux.  The  first  thing  to  suspect  in  this  case are the
+   libraries  in  ${MATLAB}/sys/os/glnx86. The command-line steps
+   were taken.
+# cd ${MATLAB}/sys/os/glnx86
+# mkdir tmp
+# mv libg2c* libgcc* libi* libstdc* tmp
+
+   Matlab was then restarted, and the mex-file worked just fine.
+     _________________________________________________________
+
+2.4. Case Study: x86-64 CentOS 4.1, older gcc
+
+   Base system is
+
+   gcc 3.4.5
+   kernel 2.6.9-11.ELsmp
+   MATLAB Version 7.1.0.183 (R14) Service Pack 3
+
+   This  linux distribution doesn't readily have an RPM for gdal,
+   so  in  this case we compile it from source. First we retrieve
+   and unpack gdal-1.3.2 from http://www.remotesensing.org/gdal/.
+   In order to build the library, I issued the commands
+CFLAGS="-fPIC" CXXFLAGS="-fPIC" ./configure --prefix=/opt/compiled/gnu/
+gdal-1.3.2
+
+   When  building  mex-files  on  the x86-64 platform, one pretty
+   much  always  has to set CFLAGS and CXXFLAGS to include -fPIC.
+   Next  I copied the $MATLABROOT/bin/mexopts.sh into my mexshape
+   directory and altered the CFLAGS and CLIBS section down at the
+   very bottom to read
+GDAL="/opt/compiled/gnu/gdal-1.3.2"
+CFLAGS="-fPIC $CFLAGS -I${GDAL}/include"
+CLIBS="$CLIBS -L${GDAL}/lib -lgdal"
+
+   From the unix command line, I issue the command
+# make
+
+   ... and it fails. For some reason, there's a C++ style comment
+   in  one  of  the  gdal  include files, and this version of gcc
+   doesn't  like  it. But as far as g++ is concerned, that's just
+   dandy. So I went back to the mexopts.sh file and make it read
+CC="g++"
+GDAL="/opt/compiled/gnu/gdal-1.3.2"
+CFLAGS="-fPIC $CFLAGS -I${GDAL}/include"
+CLIBS="$CLIBS -L${GDAL}/lib -lgdal"
+
+   and  then  it  compiled  and  ran  fine. The issue here really
+   wasn't  that  the platform was x86-64, but that the version of
+   gcc was a little too old.
+     _________________________________________________________
+
+2.5. Case Study: Solaris
+
+   Base system is
+
+   gcc 4.1.1
+   SunOS ahab 5.8 Generic_108528-15 sun4u sparc SUNW,Ultra-60
+   Solaris
+   MATLAB Version 7.0.1.24704 (R14) Service Pack 1
+   gdal 1.3.2
+
+   First    we    retrieve    and    unpack    gdal-1.3.2    from
+   http://www.remotesensing.org/gdal/.  In  order  to  build  the
+   library, I issued the commands
+./configure --prefix=/m1/local ; make ; make install
+
+   Now  copy  the  $MATLABROOT/bin/gccopts.sh  into your mexshape
+   directory,  rename  it to mexopts.sh, and alter the CFLAGS and
+   CLIBS section down at the very bottom to read
+GDAL="/m1/local"
+CFLAGS="$CFLAGS -I${GDAL}/include"
+CLIBS="$CLIBS -L${GDAL}/lib -lgdal "
+
+   From the unix command line, issue the command
+# make
+
+   ... and it works.
+     _________________________________________________________
+
+2.6. Case Study: Windows
+
+   I've  not  worked  on  a  windows  version,  but the following
+   information was provided to me courtesy of David Balder...
+
+
+   The .dll uses some other dlls from the gdal distribution. I've
+   build this one against FWTools, a precompiled version of
+   various open source GIS packages distributed by Frank
+   Warmerdam. More specifically, I've build this one against GDAL
+   1.2.6, contained in FWTools version 0.9.8.
+
+   Steps to install FWTools:
+
+     * Go to http://fwtools.maptools.org/ and get the installer.
+     * Install wherever you like.
+     * Add the 'Path:\to\FWTools\bin' to your path variables
+       (right-click "My computer", "properties", "Advanced",
+       "Environmental variables", edit path.
+     * Close it all.
+     * Start Matlab. If it was already running, restart it: it
+       needs the new Path variable
+     * Add the directory with the readgdal.m, dumpgdal.m and
+       mexgdal.dll files to your 'Set Path' dialogue box.
+     * Have fun ;)
+
+   As far as compiling mexgdal, I've succesfully used:
+
+     *
+mex mexgdal.c -v -IPath:\to\FWTools\include Path:\to\FWTools\lib\gdal_i
+.lib -O -DWIN32
+
+
+   --David Balder
+
+   I  personally have not been able to get this to work with lcc,
+   R14, and Windows XP.
+     _________________________________________________________
+
+Chapter 3. Wrapping It All Up...
+
+3.1. Credits
+
+   Thanks  to  David Balder for providing several enhancements as
+   well as the build instructions for a Windows DLL.

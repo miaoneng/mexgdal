@@ -1,0 +1,272 @@
+<chapter>
+
+<title> Introduction </title>
+
+
+<sect1>
+	<title> Quick Overview </title>
+
+
+<para>
+GDAL is a library capable of reading a plethora of raster formats.
+If you have GDAL installed on your system, check out "gdal-config
+--formats" to see what formats your installed version supports.  If you
+have a specific format in mind that is supported by GDAL, but not
+listed under "gdal-config --formats", then you would have to recompile
+GDAL with support for that format.  For more information on GDAL, see
+http://www.remotesensing.org/gdal/
+</para>
+
+<para>
+MEXGDAL is the interface between MATLAB and GDAL.  It is capable of
+reading both the raster metadata and the data itself.
+</para>
+
+<para>
+A few m-files are provided for your use, 
+<filename>readgdalsimple.m</filename>,  
+<filename>readgdalband.m</filename>,  
+and
+<filename>gdaldump.m</filename>.
+These sit between you and mexgdal, which you probably do not want to call
+directly.  
+</para>
+
+
+</sect1>
+
+
+
+
+
+
+<sect1>
+	<title> Requirements </title>
+	<para>
+		Mexshape requires Matlab version R13 or higher.  
+	</para>
+	<para>
+		Mexshape requires gdal.  Shapelib is distributed
+		under the LGPL and can be found at 
+		<ulink url="http://www.remotesensing.org/gdal/">http://www.remotesensing.org/gdal/</ulink>.
+	</para>
+</sect1>
+
+
+<sect1>
+	<title> Contents of this Package </title>
+	<variablelist>
+		<title></title>
+		<varlistentry>
+			<term>ChangeLog</term>
+			<listitem> <para> Developer information, you
+			probably don't need to read this.  </para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>CREDITS</term>
+			<listitem> <para> People who've helped out with
+			mexgdal.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>NEWS</term>
+			<listitem> <para> Information about the latest
+			mexgdal release  </para></listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>README</term>
+			<listitem> <para> Text documentation about
+			mexgdal.  Equivalent to what you will find in
+			doc/html  </para></listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>doc/html </term>
+			<listitem> <para> HTML documentation about
+			mexgdal.  Equivalent to what you will find in
+			the README file. </para> </listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>doc/xml </term>
+			<listitem> <para> DocBook XML documentation about
+			mexshape.  This is actually what generates the
+			README and doc/html documentation.  Not really
+			suitable for human consumption.
+			</para> </listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>makefile</term>
+			<listitem> 
+				<para> Used to build the mex-file </para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>private/mexgdal_validate_input_options.m</term>
+			<listitem> <para> 
+				Validates the users choices about how a
+				raster file is to be read.  Should not
+				be called directly by the user.
+			</para></listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>readgdalsimple.m</term>
+			<listitem> <para> 
+				Assumes most basic defaults for reading
+				a raster image.  May not work for
+				complicated files.
+			</para></listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>readgdalband.m</term>
+			<listitem> <para> 
+				Allows for more detailed control over
+				how an image is read.  Cannot read more
+				than one band at a time, however.
+			</para></listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>gdaldump.m</term>
+			<listitem> <para> Retrieves metadata about a
+			raster file.  </para></listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>data/modis.{JPG,wld}</term>
+			<listitem> <para> Test data.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>test_gdal.m</term>
+			<listitem> <para> Tests <filename>readgdalsimple.m</filename> with the MODIS image test data</para></listitem>
+		</varlistentry>
+	</variablelist>
+		
+</sect1>
+
+
+<sect1>
+	<title>Using Mexgdal</title>
+
+	<sect2>
+		<title>gdaldump</title>
+		<para>
+			<filename>gdaldump</filename> is an m-file
+			that does nothing but return metadata about
+			the raster file in question.  For example, the
+			raster file <filename>modis.JPG</filename>  is
+			provided with mexgdal (along with a world file).
+			Unleashing <filename>gdaldump</filename> upon
+			this raster file yields
+			<programlisting>
+>> a = gdaldump ( 'data/modis.JPG' )
+
+a =
+
+       ProjectionRef: ''
+        GeoTransform: [6x1 double]
+     DriverShortName: 'JPEG'
+      DriverLongName: 'JPEG JFIF'
+         RasterXSize: 1608
+         RasterYSize: 2046
+         RasterCount: 3
+              Driver: [49x1 struct]
+                Band: [3x1 struct]
+
+
+			</programlisting>
+			So here the image is clearly has 2046 rows and
+			1608 columns of pixels.  The raster file was
+			clearly identified as a JPEG, which we already
+			knew, of course (other available drivers are
+			listed in the Driver field).
+		</para>
+		<para>
+			The RasterCount is 3, meaning that there is a red channel, a green channel, and a blue channel.
+		</para>
+		<para>
+			There is no projection associated with this raster, so the ProjectionRef field is empty.
+		</para>
+	</sect2>
+
+
+
+
+	<sect2>
+		<title>readgdalsimple</title>
+		<para>
+			<filename>Readgdalsimple</filename> is the m-file
+			you will want to use most of the time to actually import the data
+			into matlab.  If we use the provided sample, then reading and
+			displaying the MODIS image is as simple as 
+			<programlisting>
+>> [x,y,z] = readgdalsimple ( 'data/modis.JPG' );
+>> image ( x, y, z );
+>> set ( gca, 'YDir', 'Normal' );
+			</programlisting>
+			<filename>Readgdalsimple</filename> reads in all the bands of an
+			image at their default resolution.  But there's no guarantee that
+			all of the bands have the same resolution.  And who knows, maybe
+			you just want to read in just a portion of a raster (sometime GeoTIFFs
+			can get awfully large).  In these cases, you should try
+			<filename>readgdalband</filename>.
+		</para>
+	</sect2>
+
+
+	<sect2>
+		<title>readgdalband</title>
+		<para>
+			Let's suppose we want to read in the 2nd band (green) of the MODIS image,
+			but starting at an offset of 500 rows and 700 columns from the
+			default.
+			<programlisting>
+>> input_options.band = 2;
+>> input_options.yorigin = 500;
+>> input_options.xorigin = 700;
+>> [x,y,z] = readgdalband ( 'data/modis.JPG', input_options );
+>> whos
+  Name                Size                    Bytes  Class
+
+  input_options       1x1                       396  struct array
+  x                   1x2                        16  double array
+  y                   1x2                        16  double array
+  z                1546x908                 1403768  uint8 array
+
+Grand total is 1403778 elements using 1404196 bytes
+
+			</programlisting>
+		</para>
+
+		<para>
+			Let's suppose we want to read in the third band (blue) of the MODIS image,
+			starting at an offset of 500 rows and 700 columns from the default,
+			but reading only 600 rows and 400 columns from that position.
+			<programlisting>
+>> input_options.band = 3;
+>> input_options.yorigin = 500;
+>> input_options.xorigin = 700;
+>> input_options.xextend = 400;
+>> input_options.yextend = 600;
+>> [x,y,z] = readgdalband ( 'data/modis.JPG', input_options );
+>> whos
+  Name                Size                    Bytes  Class
+
+  input_options       1x1                       660  struct array
+  x                   1x2                        16  double array
+  y                   1x2                        16  double array
+  z                 600x400                  240000  uint8 array
+
+Grand total is 1403778 elements using 1404196 bytes
+
+			</programlisting>
+		</para>
+		<para>
+			Other options exist, please use the help documentation for more information.
+		</para>
+
+	</sect2>
+</sect1>
+
+</chapter>
+
+
+
+
+

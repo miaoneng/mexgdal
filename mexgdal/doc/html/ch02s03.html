@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title> Case Study:  i586 Mandriva 2006, R2006a</title><link rel="stylesheet" href="style.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.69.1" /><link rel="start" href="index.html" title="MEXGDAL" /><link rel="up" href="ch02.html" title="Chapter 2.  Compiling Mexgdal" /><link rel="prev" href="ch02s02.html" title=" Case Study:  i586 Mandriva 2006, R14" /><link rel="next" href="ch02s04.html" title=" Case Study:  x86-64 CentOS 4.1, older gcc" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"> Case Study:  i586 Mandriva 2006, R2006a</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s02.html">Prev</a> </td><th width="60%" align="center">Chapter 2.  Compiling Mexgdal</th><td width="20%" align="right"> <a accesskey="n" href="ch02s04.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2521828"></a> Case Study:  i586 Mandriva 2006, R2006a</h2></div></div></div><p>
+Base system is 
+</p><table class="simplelist" border="0" summary="Simple list"><tr><td>gcc 4.0.1-5mdk</td></tr><tr><td>kernel 2.6.12-22mdk </td></tr><tr><td>MATLAB Version 7.2.0.294 (R2006a)</td></tr></table><p>
+</p><p>
+	The 
+	<a href="ch02s02.html" title=" Case Study:  i586 Mandriva 2006, R14"> instructions for the i586 R14 case study</a>
+	didn't quite work here, as the attempt to run the test case resulted in
+	</p><pre class="programlisting">
+&gt;&gt; test_gdal
+??? Invalid MEX-file '/home/jevans/matlab/mexgdal/mexgdal.mexglx': 
+	/opt/MatlabR2006a/bin/glnx86/../../sys/os/glnx86/libgcc_s.so.1: 
+	version `GCC_4.0.0' not found (required by /usr/lib/libgeos.so.2).
+
+Error in ==&gt; gdaldump at 67
+metadata = mexgdal ( gdalfile, options );
+
+Error in ==&gt; test_gdal at 3
+m = gdaldump ( f );
+
+
+	</pre><p>
+
+	This is pretty common when building mex-files on linux.  The first thing to suspect
+	in this case are the libraries in <code class="filename">${MATLAB}/sys/os/glnx86</code>.
+
+	The command-line steps were taken.
+
+	</p><pre class="programlisting">
+# cd ${MATLAB}/sys/os/glnx86
+# mkdir tmp
+# mv libg2c* libgcc* libi* libstdc* tmp
+	</pre><p>
+
+	Matlab was then restarted, and the mex-file worked just fine.
+
+
+</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> Case Study:  i586 Mandriva 2006, R14 </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">  Case Study:  x86-64 CentOS 4.1, older gcc</td></tr></table></div></body></html>

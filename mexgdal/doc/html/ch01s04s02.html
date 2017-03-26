@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>readgdalsimple</title><link rel="stylesheet" href="style.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.69.1" /><link rel="start" href="index.html" title="MEXGDAL" /><link rel="up" href="ch01s04.html" title="Using Mexgdal" /><link rel="prev" href="ch01s04.html" title="Using Mexgdal" /><link rel="next" href="ch01s04s03.html" title="readgdalband" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">readgdalsimple</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01s04.html">Prev</a> </td><th width="60%" align="center">Using Mexgdal</th><td width="20%" align="right"> <a accesskey="n" href="ch01s04s03.html">Next</a></td></tr></table><hr /></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2476926"></a>readgdalsimple</h3></div></div></div><p>
+			<code class="filename">Readgdalsimple</code> is the m-file
+			you will want to use most of the time to actually import the data
+			into matlab.  If we use the provided sample, then reading and
+			displaying the MODIS image is as simple as 
+			</p><pre class="programlisting">
+&gt;&gt; [x,y,z] = readgdalsimple ( 'data/modis.JPG' );
+&gt;&gt; image ( x, y, z );
+&gt;&gt; set ( gca, 'YDir', 'Normal' );
+			</pre><p>
+			<code class="filename">Readgdalsimple</code> reads in all the bands of an
+			image at their default resolution.  But there's no guarantee that
+			all of the bands have the same resolution.  And who knows, maybe
+			you just want to read in just a portion of a raster (sometime GeoTIFFs
+			can get awfully large).  In these cases, you should try
+			<code class="filename">readgdalband</code>.
+		</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01s04.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch01s04s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Using Mexgdal </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> readgdalband</td></tr></table></div></body></html>

@@ -1,0 +1,38 @@
+* Fri Sep 01 2006 John Evans <john.g.evans.ne@gmail.com> 2.0.4
+- Fixed mlint concerns in mexgdal_validate_input_options.m
+- Fixed some misleading statements in the DocBook documentation.
+
+* Tue Aug 29 2006 John Evans <john.g.evans.ne@gmail.com> 2.0.3
+- Fixed mlint concerns in readgdalband.m and readgdalsimple.m
+
+* Wed Aug 16 2006 John Evans <john.g.evans.ne@gmail.com> 2.0.2
+- Added R2006a case in documentation.
+- Fixed a couple of omissions from the manifest.
+- Added casting hints to get mexgdal to compile with g++
+- Updated x86_64 gcc 3.4.5 case for g++
+
+* Wed Aug 16 2006 John Evans <john.g.evans.ne@gmail.com> 2.0.1
+- Removed readgdal.  Added m-files readgdalsimple and readgdalband
+- Added private directory.
+- Documentation reworked to DocBook format.
+
+* Mon Jul 17 2006 John Evans <john.g.evans.ne@gmail.com> 
+- Imported into subversion.
+
+* Wed Jan 25 2006 John Evans <john.g.evans.ne@gmail.com> 
+- Fixed minor omission in README for x86_64 platform.
+
+* Mon Jan 09 2006 John Evans <john.g.evans.ne@gmail.com> 2.0.0
+- Added -Wall compiler switch for Linux.  Removed unused variables.
+- 2.0.0 release.
+
+* Fri Jan 06 2006 John Evans <john.g.evans.ne@gmail.com> 
+- Dave Balder added xOut, yOut, xExtend, yExtend, xOrigin, yOrigin parameters.  
+- Added "unpack_xxx" functions to deal with them.
+- Removed unix platforms directories.
+- Improved the README.
+
+
+* Fri Dec 10 2004 John Evans <john.g.evans.ne@gmail.com>
+- Added structure definitions to gdaldump.m.  
+- Added at least some testing to mexgdal.m

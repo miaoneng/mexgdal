@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Using Mexgdal</title><link rel="stylesheet" href="style.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.69.1" /><link rel="start" href="index.html" title="MEXGDAL" /><link rel="up" href="ch01.html" title="Chapter 1.  Introduction " /><link rel="prev" href="ch01s03.html" title=" Contents of this Package " /><link rel="next" href="ch01s04s02.html" title="readgdalsimple" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Using Mexgdal</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01s03.html">Prev</a> </td><th width="60%" align="center">Chapter 1.  Introduction </th><td width="20%" align="right"> <a accesskey="n" href="ch01s04s02.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2476864"></a>Using Mexgdal</h2></div></div></div><div class="toc"><dl><dt><span class="sect2"><a href="ch01s04.html#id2476870">gdaldump</a></span></dt><dt><span class="sect2"><a href="ch01s04s02.html">readgdalsimple</a></span></dt><dt><span class="sect2"><a href="ch01s04s03.html">readgdalband</a></span></dt></dl></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2476870"></a>gdaldump</h3></div></div></div><p>
+			<code class="filename">gdaldump</code> is an m-file
+			that does nothing but return metadata about
+			the raster file in question.  For example, the
+			raster file <code class="filename">modis.JPG</code>  is
+			provided with mexgdal (along with a world file).
+			Unleashing <code class="filename">gdaldump</code> upon
+			this raster file yields
+			</p><pre class="programlisting">
+&gt;&gt; a = gdaldump ( 'data/modis.JPG' )
+
+a =
+
+       ProjectionRef: ''
+        GeoTransform: [6x1 double]
+     DriverShortName: 'JPEG'
+      DriverLongName: 'JPEG JFIF'
+         RasterXSize: 1608
+         RasterYSize: 2046
+         RasterCount: 3
+              Driver: [49x1 struct]
+                Band: [3x1 struct]
+
+
+			</pre><p>
+			So here the image is clearly has 2046 rows and
+			1608 columns of pixels.  The raster file was
+			clearly identified as a JPEG, which we already
+			knew, of course (other available drivers are
+			listed in the Driver field).
+		</p><p>
+			The RasterCount is 3, meaning that there is a red channel, a green channel, and a blue channel.
+		</p><p>
+			There is no projection associated with this raster, so the ProjectionRef field is empty.
+		</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01s03.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch01s04s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> Contents of this Package  </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> readgdalsimple</td></tr></table></div></body></html>
