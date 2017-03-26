@@ -247,8 +247,6 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[])
 
     gdal_filename = (char*)mxCalloc(buflen, sizeof(char));
 
-    mexPrintf(gdal_filename);
-
     /*
      * copy the string data from prhs[0] into a C string.
      * */
@@ -286,8 +284,6 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[])
         plhs[0] = populate_metadata_struct(gdal_filename);
         return;
     }
-
-    mexPrintf("7\n");
 
     /*
      * Open the file.

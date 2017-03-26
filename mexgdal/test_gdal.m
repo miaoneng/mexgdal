@@ -1,4 +1,4 @@
-f = '20030918-093102.img';
+f = 'data/20030918-093102.img';
 options.verbose = 1;
 m = gdaldump ( f );
 [x,y,z] = readgdalsimple ( f );
