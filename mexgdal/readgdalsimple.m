@@ -110,7 +110,7 @@ end
 
 
 
-if length(metadata.GeoTransform) ~= 0
+if ~isempty(metadata.GeoTransform)
 	% Construct x and y
 	x0 = metadata.GeoTransform(1);
 	xinc = metadata.GeoTransform(2);

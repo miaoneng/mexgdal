@@ -1,0 +1,8 @@
+mexgdal.mexw64: mexgdal.c
+	
+	mex -v -lgdal_i -I"C:\Program Files\GDAL\include" -L"C:\Program Files\GDAL\lib" mexgdal.c
+
+
+clean:
+	
+	rm -f mexgdal.mex*
